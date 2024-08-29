@@ -16,6 +16,9 @@ frog_speed = 5;
 leap_speed = 10;
 lowest_y_position = height - 50;
 highest_y_position = 0; 
+# frogger_image = pygame.image.load("./assets/frogger.png").convert_alpha();
+# frogger_rect = frogger_image.get_rect();
+# frogger_rect.topleft = (100, 300);
 
 class Frog:
     def __init__(self, image_path, x, y):
@@ -40,10 +43,15 @@ class Frog:
         # Set the initial velocity of the frog
         self.speed = frog_speed;
         self.leap_speed = leap_speed;
+    
+        # Create a rect for the frog for collision detection
+        self.rect = self.image.get_rect();
+        self.rect.topleft = (self.x, self.y);
 
     def draw(self, screen):
         # Draw the frog
-        screen.blit(self.image, (self.x, self.y));
+        self.rect.topleft = (self.x, self.y);
+        screen.blit(self.image, self.rect.topleft);
 
     def move_horizontal(self, dx):
         # Update the frog's position
@@ -70,6 +78,11 @@ class Frog:
                 else:
                     self.y = self.leap_target_y;
                     self.is_leaping = False;
+        self.rect.topleft = (self.x, self.y);
+    
+    def check_collision(self, other_rect):
+        return self.rect.colliderect(other_rect);
+
 
 class Terrain:
     def __init__(self, x,y, width, height, color):
@@ -81,9 +94,34 @@ class Terrain:
         pygame.draw.rect(screen, self.color, self.rect);
 
 
-# Create the frog
+class Log:
+    def __init__(self, x, y, width, height, color, direction, speed):
+        # Set log properties
+        self.rect = pygame.Rect(x,y,width,height);
+        self.x = x;
+        self.color = color;
+        self.direction = direction;
+        self.speed = speed;
+    def draw(self, screen):
+        # Draw the log as a filled rectangle
+        pygame.draw.rect(screen, self.color, self.rect);
+    def move(self):
+        # move the log to the left
+        if(self.direction == "left"):
+            # Check if the log is out the screen
+            if(not self.rect.right < 0):
+                self.rect.x -= self.speed;
+            else:
+                self.rect.x = width;
+
+
+
+# Create the frog 
 frogger = Frog('./assets/frogger.png', width/2, height-50);
 highest_y_position = frogger.image.get_height();
+
+# Add a log
+log_left = Log(width, height-152, 200, 50, (0,0,0), "left", 5);
 
 # Create a terrain object
 starting_zone = Terrain(0,height-100, width, 100, (166,141,80));
@@ -125,6 +163,10 @@ while True:
     
     #Update frog leap
     frogger.update();
+    log_left.move();
+
+    if frogger.check_collision(log_left.rect):
+        print(f"Collision with log");
       # Ensure the frog stays within vertical boundaries
     if frogger.y > lowest_y_position:
         frogger.y = lowest_y_position;
@@ -136,6 +178,8 @@ while True:
 
     # Draw the game objects
     starting_zone.draw(screen);
+    log_left.draw(screen);
+    
     frogger.draw(screen);
 
 
