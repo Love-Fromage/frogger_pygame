@@ -114,7 +114,6 @@ while True:
                 frogger.start_leap(1); # Leap up
     else: 
         key_pressed['up'] = False;
-        # frogger.is_leaping = False;
 
     if(keys[pygame.K_DOWN]):
         if(not key_pressed['down']):
@@ -123,7 +122,6 @@ while True:
                 frogger.start_leap(-1); # Leap down
     else:
         key_pressed['down'] = False;
-        # frogger.is_leaping = False;
     
     #Update frog leap
     frogger.update();
