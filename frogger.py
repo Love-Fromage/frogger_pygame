@@ -30,7 +30,8 @@ class Frog:
             print(f"Failed to load the image from {image_path}");
             sys.exit();
         # Scale the image down
-        self.image = pygame.transform.scale(self.image, (50, 50));
+        self.original_image = pygame.transform.scale(self.image, (50, 50));
+        self.image = self.original_image.copy(); # Make a copy to rotate later
 
         # Set the initial position of the frog
         self.x = x - self.image.get_width()/2;
@@ -51,11 +52,40 @@ class Frog:
     def draw(self, screen):
         # Draw the frog
         self.rect.topleft = (self.x, self.y);
+        self.draw_hitbox(screen);
         screen.blit(self.image, self.rect.topleft);
+    
+    def draw_hitbox(self, screen):
+        # Draw a rectangle around the frog's rect (hitbox) for debugging
+        pygame.draw.rect(screen, (0,0,255), self.rect, self.rect.width);
 
     def move_horizontal(self, dx):
         # Update the frog's position
         self.x += dx;
+        if(dx > 0):
+            # If going right
+            self.rotation_angle = -90;
+            self.rotation_angle %= 360; # Keep angle within 0-359 degress
+
+            # Rotate the image
+            self.image = pygame.transform.rotate(self.original_image, self.rotation_angle);
+    
+            # Update the rect to the new image size and position
+            self.rect = self.image.get_rect(center=self.rect.center);
+        if(dx < 0):
+            # If going left
+            self.rotation_angle = 90;
+            self.rotation_angle %= 360;
+    
+            # Rotate the image
+            self.image = pygame.transform.rotate(self.original_image, self.rotation_angle);
+    
+            # Update the rect to the new image size and position
+            self.rect = self.image.get_rect(center=self.rect.center);
+
+    def rotate_back(self):
+        self.image = pygame.transform.rotate(self.original_image, 0);
+        self.rect = self.image.get_rect(center=self.rect.center);
 
     def start_leap(self, direction):
         # if not self.is_leaping:
@@ -127,7 +157,7 @@ log_left = Log(width, height-152, 200, 50, (0,0,0), "left", 5);
 starting_zone = Terrain(0,height-100, width, 100, (166,141,80));
 
 # Initialize key state tracking
-key_pressed = { 'up': False, 'down': False};
+key_pressed = { 'up': False, 'down': False, "left": False, "right":False};
 
 # Game loop
 while True:
@@ -140,10 +170,13 @@ while True:
     keys = pygame.key.get_pressed()
     
     if(keys[pygame.K_LEFT]):
-        frogger.move_horizontal(-frogger.speed);
+            frogger.move_horizontal(-frogger.speed);
 
+    else:
+        frogger.rotate_back();
     if(keys[pygame.K_RIGHT]):
         frogger.move_horizontal(frogger.speed);
+    
 
     if(keys[pygame.K_UP]):
         if(not key_pressed['up']):
