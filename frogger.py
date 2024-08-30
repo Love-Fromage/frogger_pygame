@@ -1,141 +1,102 @@
 import pygame
 import sys
+
+import pygame.locals
 from Frog import Frog
 
 # Initialize Pygame
 pygame.init()
 
 # Set up the display
-width, height = 800, 600
-screen = pygame.display.set_mode((width, height))
+# Define constants for the game
+GRID_SIZE = 50 ; # Size of the cells in pixels
+ROWS = 12;
+COLS = 16;
+SCREEN_WIDTH = COLS * GRID_SIZE;
+SCREEN_HEIGHT = ROWS * GRID_SIZE;
+CLOCK = pygame.time.Clock();
+FPS=30;
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Frogger in Python");
 
-# Set up game variables
-clock = pygame.time.Clock()
-fps=30
-frog_speed = 5;
-leap_speed = 10;
-lowest_y_position = height - 50;
-highest_y_position = 0; 
-# frogger_image = pygame.image.load("./assets/frogger.png").convert_alpha();
-# frogger_rect = frogger_image.get_rect();
-# frogger_rect.topleft = (100, 300);
+
+game_grid = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+];
 
 
+frogger_image = pygame.image.load("./assets/frogger.png");
+frogger_image = pygame.transform.scale(frogger_image, (GRID_SIZE, GRID_SIZE));
 
-class Terrain:
-    def __init__(self, x,y, width, height, color):
-        # Set terrain properties
-        self.rect = pygame.Rect(x,y,width,height);
-        self.color = color;
-    def draw(self, screen):
-        # Draw the terrain as a filled rectangle
-        pygame.draw.rect(screen, self.color, self.rect);
+frogger = Frog(frogger_image, x=8, y=11);
 
 
-class Log:
-    def __init__(self, x, y, width, height, color, direction, speed):
-        # Set log properties
-        self.rect = pygame.Rect(x,y,width,height);
-        self.x = x;
-        self.color = color;
-        self.direction = direction;
-        self.speed = speed;
-    def draw(self, screen):
-        # Draw the log as a filled rectangle
-        pygame.draw.rect(screen, self.color, self.rect);
-    def move(self):
-        # move the log to the left
-        if(self.direction == "left"):
-            # Check if the log is out the screen
-            if(not self.rect.right < 0):
-                self.rect.x -= self.speed;
-            else:
-                self.rect.x = width;
-
-
-
-# Create the frog 
-frogger = Frog('./assets/frogger.png', width/2, height-50);
-highest_y_position = frogger.image.get_height();
-
-# Add a log
-log_left = Log(width, height-152, 200, 50, (0,0,0), "left", 5);
-
-# Create a terrain object
-starting_zone = Terrain(0,height-100, width, 100, (166,141,80));
-
-# Initialize key state tracking
-key_pressed = { 'up': False, 'down': False, "left": False, "right":False};
-
-# Game loop
-while True:
+def handle_key_events(frogger):
     for event in pygame.event.get():
-        if(event.type == pygame.QUIT):
-            pygame.quit()
-            sys.exit()
+        if event.type == pygame.QUIT :
+            pygame.QUIT;
+            sys.exit();
 
-        # Game logic goes here
-    keys = pygame.key.get_pressed()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                frogger.move("up");
+            elif event.key == pygame.K_DOWN:
+                frogger.move("down");
+            elif event.key == pygame.K_LEFT:
+                frogger.move("left");
+            elif event.key == pygame.K_RIGHT:
+                frogger.move("right");
+
+def draw_game(frogger):
+    screen.fill(( 0,0,0 )); # clear screen with black color
+
+    for row in range(ROWS):
+        for col in range(COLS):
+            cell_value = game_grid[row][col];
     
-    if(keys[pygame.K_LEFT]):
-            frogger.move_horizontal(-frogger.speed);
+            if cell_value == 0:
+                # draw grass
+                pygame.draw.rect(screen, (0,255,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+            elif cell_value == 1:
+                #draw water
+                pygame.draw.rect(screen, (0,0,255), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+            elif cell_value == 2:
+                # draw an obstacle
+                pygame.draw.rect(screen, (255,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+                 
 
-    else:
-        frogger.rotate_back();
-    if(keys[pygame.K_RIGHT]):
-        frogger.move_horizontal(frogger.speed);
-    
 
-    if(keys[pygame.K_UP]):
-        if(not key_pressed['up']):
-            key_pressed['up'] = True;
-            if(frogger.y > highest_y_position-50):
-                frogger.start_leap(1); # Leap up
-    else: 
-        key_pressed['up'] = False;
 
-    if(keys[pygame.K_DOWN]):
-        if(not key_pressed['down']):
-            key_pressed['down'] = True;
-            if(frogger.y < lowest_y_position):
-                frogger.start_leap(-1); # Leap down
-    else:
-        key_pressed['down'] = False;
-    
-    log_left.move();
 
-    # Ensure the frog stays within vertical boundaries
-    if frogger.y > lowest_y_position:
-        frogger.y = lowest_y_position;
-    if frogger.y < highest_y_position -50:
-        frogger.y = highest_y_position -50;
 
-    if frogger.check_collision(log_left.rect):
-        frogger.is_on_log = True;
-    else:
-        frogger.is_on_log = False;
-        frogger.move_on_log = False;
 
-    frogger.follow_log(log_left.rect);
 
-    frogger.update();
-    
-
-    # Clear the screen
-    screen.fill((33, 157, 225));
-
-    # Draw the game objects
-    starting_zone.draw(screen);
-    log_left.draw(screen);
-    
+    # Draw frogger
     frogger.draw(screen);
 
+    #Draw other game elements here
+
+    pygame.display.flip(); # Update the display
 
 
-    # Update the display
-    pygame.display.flip();  
 
-
+# Game loop
+game_is_running = True;
+while game_is_running:
+    handle_key_events(frogger);
+    frogger.check_collision(game_grid);
+    draw_game(frogger);
     # Cap the frame rate 
-    clock.tick(fps);
+    CLOCK.tick(FPS);
