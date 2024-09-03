@@ -24,8 +24,10 @@ pygame.display.set_caption("Frogger in Python");
 # Sounds goes here!
 pygame.mixer.init();
 looping_sound = pygame.mixer.Sound("./assets/sounds/Is or Aint V1.wav");
-# looping_sound.play(loops=-1);
+looping_sound.play(loops=-1);
 looping_sound.set_volume(0.1);
+ouch_sound = pygame.mixer.Sound("./assets/sounds/Low Thud.mp3");
+ouch_sound.set_volume(0.5);
 
 game_grid = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -125,7 +127,13 @@ def draw_game(frogger, car):
 game_is_running = True;
 while game_is_running:
     handle_key_events(frogger);
+
+    if frogger.rect.colliderect(car.rect) and not frogger.invulnerable:
+        ouch_sound.play();
+
     frogger.check_collision(car.rect);
+
+
     if frogger.invulnerable:
         frogger.invulnerable_timer -=1;
         if frogger.invulnerable_timer <=0:
