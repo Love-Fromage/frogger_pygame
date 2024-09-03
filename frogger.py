@@ -30,7 +30,7 @@ game_grid = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -73,8 +73,8 @@ def draw_game(frogger):
                 #draw water
                 pygame.draw.rect(screen, (0,0,255), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
             elif cell_value == 2:
-                # draw an obstacle
-                pygame.draw.rect(screen, (255,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+                # draw an road
+                pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
                  
 
 
