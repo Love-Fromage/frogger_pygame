@@ -8,7 +8,8 @@ class Car:
         self.direction = direction;
         self.original_image = image;
         self.image = image;
-        self.rect = self.image.get_rect();
+        # self.rect = self.image.get_rect();
+        self.rect = pygame.Rect(x,y, self.image.get_rect().width, 50);
         self.image = pygame.transform.rotate(self.original_image, 90);
         self.pixel_x, self.pixel_y = self.get_pixel_position();
 
@@ -22,6 +23,8 @@ class Car:
         else:
             self.grid_x = 16;
         self.pixel_x, self.pixel_y = self.get_pixel_position();
+
+        self.rect.topleft = (self.pixel_x, self.pixel_y+25);
 
     def draw(self, screen):
         screen.blit(self.image, (self.pixel_x, self.pixel_y));

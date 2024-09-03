@@ -91,6 +91,9 @@ def draw_game(frogger, car):
     car.draw(screen);
 
     #Draw other game elements here
+    # Draw hitboxes for debugging
+    pygame.draw.rect(screen, (0,0,255), frogger.rect, 2);
+    pygame.draw.rect(screen, (255,0,255), car.rect, 2);
 
     pygame.display.flip(); # Update the display
 
@@ -100,7 +103,7 @@ def draw_game(frogger, car):
 game_is_running = True;
 while game_is_running:
     handle_key_events(frogger);
-    frogger.check_collision(game_grid);
+    frogger.check_collision(car.rect);
     car.move();
     draw_game(frogger, car);
     # Cap the frame rate 

@@ -8,6 +8,7 @@ class Frog:
         self.image = image;
         self.rect = self.image.get_rect();
         self.pixel_x, self.pixel_y = self.get_pixel_position();
+        self.rect.topleft = (self.pixel_x, self.pixel_y);
 
     def get_pixel_position(self):
         return self.grid_x * 50, self.grid_y *50 # ASSUME GRID_SIZE is 50 pixels
@@ -28,6 +29,7 @@ class Frog:
         
         # Update pixel position after moving
         self.pixel_x, self.pixel_y = self.get_pixel_position();
+        self.rect.topleft = (self.pixel_x, self.pixel_y);
     
     def rotate(self, direction):
         if(direction == "left"):
@@ -45,7 +47,10 @@ class Frog:
             
 
     def draw(self, screen):
-       screen.blit(self.image, (self.pixel_x, self.pixel_y));
-
-    def check_collision(self, game_grid):
-        current_tile = game_grid[self.grid_y][self.grid_x];
+        screen.blit(self.image, (self.pixel_x, self.pixel_y));
+    def check_collision(self, other_rect):
+        # current_tile = game_grid[self.grid_y][self.grid_x];
+        if self.rect.colliderect(other_rect):
+            print("ouch!");
+            return True;
+        return False;
