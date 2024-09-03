@@ -21,6 +21,11 @@ FPS=14;
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Frogger in Python");
 
+# Sounds goes here!
+pygame.mixer.init();
+looping_sound = pygame.mixer.Sound("./assets/sounds/Is or Aint V1.wav");
+# looping_sound.play(loops=-1);
+looping_sound.set_volume(0.1);
 
 game_grid = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
