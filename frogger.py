@@ -39,17 +39,22 @@ game_grid = [
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
 ];
 
 
-frogger_image = pygame.image.load("./assets/frogger.png");
+frogger_image = pygame.image.load("./assets/frogger.png").convert_alpha();
 frogger_image = pygame.transform.scale(frogger_image, (GRID_SIZE, GRID_SIZE));
+frog_life_image = frogger_image;
+frog_life_image = pygame.transform.scale(frog_life_image, (GRID_SIZE/2, GRID_SIZE/2));
 car_image = pygame.image.load("./assets/police_car.png");
 
 car = Car(car_image, 15, 8, "left");
 
-frogger = Frog(frogger_image, x=8, y=11);
+frogger = Frog(frogger_image, x=8, y=10);
+life1 = Frog(frog_life_image, x=0, y=11);
+life2 = Frog(frog_life_image, x=1, y=11);
+life3 = Frog(frog_life_image, x=2, y=11);
 
 
 
@@ -85,7 +90,8 @@ def draw_game(frogger, car):
             elif cell_value == 2:
                 # draw an road
                 pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
-
+            elif cell_value == -1:
+                pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
             
             # pygame.draw.rect(screen, (230, 0,0), (15*GRID_SIZE, 8*GRID_SIZE+ GRID_SIZE/4, GRID_SIZE/2, GRID_SIZE/2))
             
@@ -94,6 +100,17 @@ def draw_game(frogger, car):
     # Draw frogger
     frogger.draw(screen);
     car.draw(screen);
+    
+    if frogger.life == 3:
+        life1.draw(screen) 
+        life2.draw(screen) 
+        life3.draw(screen)
+    elif frogger.life == 2:
+        life1.draw(screen)
+        life2.draw(screen)
+    elif frogger.life == 1:
+        life1.draw(screen);
+
 
     #Draw other game elements here
     # Draw hitboxes for debugging
@@ -109,6 +126,15 @@ game_is_running = True;
 while game_is_running:
     handle_key_events(frogger);
     frogger.check_collision(car.rect);
+    if frogger.invulnerable:
+        frogger.invulnerable_timer -=1;
+        if frogger.invulnerable_timer <=0:
+            frogger.invulnerable = False;
+            frogger.alpha = 255;
+        else:
+            frogger.alpha += frogger.alpha_change_direction;
+            if frogger.alpha <= 50 or frogger.alpha >=255:
+                    frogger.alpha_change_direction *= -1;
     car.move();
     draw_game(frogger, car);
     # Cap the frame rate 
