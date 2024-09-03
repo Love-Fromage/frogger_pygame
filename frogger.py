@@ -68,7 +68,7 @@ def draw_game(frogger):
     
             if cell_value == 0:
                 # draw grass
-                pygame.draw.rect(screen, (0,255,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+                pygame.draw.rect(screen, (37,211,102), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
             elif cell_value == 1:
                 #draw water
                 pygame.draw.rect(screen, (0,0,255), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
