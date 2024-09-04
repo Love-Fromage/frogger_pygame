@@ -50,6 +50,7 @@ frogger_image = pygame.transform.scale(frogger_image, (GRID_SIZE, GRID_SIZE));
 frog_life_image = frogger_image;
 frog_life_image = pygame.transform.scale(frog_life_image, (GRID_SIZE/2, GRID_SIZE/2));
 car_image = pygame.image.load("./assets/police_car.png");
+road_image = pygame.image.load("./assets/road.png");
 
 car = Car(car_image, 15, 8, "left");
 
@@ -91,7 +92,8 @@ def draw_game(frogger, car):
                 pygame.draw.rect(screen, (0,0,255), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
             elif cell_value == 2:
                 # draw an road
-                pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+                # pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
+                screen.blit(road_image,(col*GRID_SIZE, row*GRID_SIZE) )
             elif cell_value == -1:
                 pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
             
