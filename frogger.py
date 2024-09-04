@@ -29,6 +29,8 @@ looping_sound.play(loops=-1);
 looping_sound.set_volume(0.1);
 ouch_sound = pygame.mixer.Sound("./assets/sounds/Low Thud.mp3");
 ouch_sound.set_volume(0.5);
+game_over_music = pygame.mixer.Sound("./assets/sounds/Music_Loop_4_Full.wav");
+game_over_music.set_volume(0.1);
 
 game_grid = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -52,6 +54,13 @@ frog_life_image = frogger_image;
 frog_life_image = pygame.transform.scale(frog_life_image, (GRID_SIZE/2, GRID_SIZE/2));
 car_image = pygame.image.load("./assets/police_car.png");
 road_image = pygame.image.load("./assets/road.png");
+game_over_text = pygame.image.load("./assets/game_over_text.png").convert_alpha();
+game_over_bg = pygame.image.load("./assets/game_over_bg.png");
+
+game_over_alpha = 255;
+game_over_direction = 1;
+game_over_speed = 7;
+game_over_text.set_alpha(game_over_alpha);
 
 car = Car(car_image, 15, 8, "left");
 
@@ -121,7 +130,21 @@ def draw_game(frogger, car):
     #Draw other game elements here
     # Draw hitboxes for debugging
     pygame.draw.rect(screen, (0,0,255), frogger.rect, 2);
-    pygame.draw.rect(screen, (255,0,255), car.rect, 2);
+    # pygame.draw.rect(screen, (255,0,255), car.rect, 2);
+
+    if is_game_over:
+        global game_over_alpha, game_over_direction
+        screen.blit(game_over_bg, (0,0))
+        game_over_alpha += game_over_direction * game_over_speed;
+        if game_over_alpha >= 255:
+            game_over_alpha = 255;
+            game_over_direction = -1;
+        elif game_over_alpha <= 0:
+            game_over_alpha = 0;
+            game_over_direction = 1;
+        game_over_text.set_alpha(game_over_alpha);
+        screen.blit(game_over_text, (0,0));
+    
 
     pygame.display.flip(); # Update the display
 
@@ -133,6 +156,7 @@ def game_over():
         car.game_over = True;
         frogger.game_over = True;
         looping_sound.stop();
+        game_over_music.play(loops=-1);
         print("cest fini")
         return
 
