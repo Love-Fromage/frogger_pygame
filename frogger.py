@@ -95,6 +95,7 @@ def draw_game(frogger, car):
                 # pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
                 screen.blit(road_image,(col*GRID_SIZE, row*GRID_SIZE) )
             elif cell_value == -1:
+                # thats the void
                 pygame.draw.rect(screen, (0,0,0), (col*GRID_SIZE, row*GRID_SIZE, GRID_SIZE, GRID_SIZE));
             
             # pygame.draw.rect(screen, (230, 0,0), (15*GRID_SIZE, 8*GRID_SIZE+ GRID_SIZE/4, GRID_SIZE/2, GRID_SIZE/2))

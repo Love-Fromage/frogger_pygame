@@ -30,7 +30,7 @@ class Frog:
         if direction == "up" and self.grid_y > 0:
             self.grid_y -= 1;
             self.rotate("up");
-        elif direction == "down" and self.grid_y < 11:
+        elif direction == "down" and self.grid_y < 10:
             self.grid_y +=1;
             self.rotate("down");
         elif direction == "left" and self.grid_x > 0:
