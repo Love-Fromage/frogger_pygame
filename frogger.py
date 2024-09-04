@@ -18,12 +18,13 @@ SCREEN_HEIGHT = ROWS * GRID_SIZE;
 CLOCK = pygame.time.Clock();
 FPS=14;
 
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Frogger in Python");
 
 # Sounds goes here!
 pygame.mixer.init();
-looping_sound = pygame.mixer.Sound("./assets/sounds/Is or Aint V1.wav");
+looping_sound = pygame.mixer.Sound("./assets/sounds/Grind.mp3");
 looping_sound.play(loops=-1);
 looping_sound.set_volume(0.1);
 ouch_sound = pygame.mixer.Sound("./assets/sounds/Low Thud.mp3");
@@ -125,16 +126,32 @@ def draw_game(frogger, car):
     pygame.display.flip(); # Update the display
 
 
+is_game_over = False;
+def game_over():
+        global is_game_over 
+        is_game_over = True;
+        car.game_over = True;
+        frogger.game_over = True;
+        looping_sound.stop();
+        print("cest fini")
+        return
 
 # Game loop
 game_is_running = True;
 while game_is_running:
+    if frogger.life == 0 and not is_game_over:
+        game_over();
+        
+
+
+
     handle_key_events(frogger);
 
-    if frogger.rect.colliderect(car.rect) and not frogger.invulnerable:
-        ouch_sound.play();
-
-    frogger.check_collision(car.rect);
+    if not is_game_over:
+        if frogger.rect.colliderect(car.rect) and not frogger.invulnerable:
+            ouch_sound.play();
+    
+        frogger.check_collision(car.rect);
 
 
     if frogger.invulnerable:
@@ -145,7 +162,7 @@ while game_is_running:
         else:
             frogger.alpha += frogger.alpha_change_direction;
             if frogger.alpha <= 50 or frogger.alpha >=255:
-                    frogger.alpha_change_direction *= -1;
+                frogger.alpha_change_direction *= -1;
     car.move();
     draw_game(frogger, car);
     # Cap the frame rate 

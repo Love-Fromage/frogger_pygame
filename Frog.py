@@ -9,7 +9,8 @@ class Frog:
         self.rect = self.image.get_rect();
         self.pixel_x, self.pixel_y = self.get_pixel_position();
         self.rect.topleft = (self.pixel_x, self.pixel_y);
-        self.life = 3;
+        self.life = 1;
+        self.game_over = False;
         self.invulnerable_timer = 0;
         self.invulnerable = False;
         self.alpha = 255;
@@ -20,29 +21,30 @@ class Frog:
 
     def lose_hp(self):
         self.start_invulnerability(40);
-        if self.life >= 0:
+        if self.life > 0:
             self.life -= 1;
     
     def start_invulnerability(self, duration):
         self.invulnerable = True;
         self.invulnerable_timer = duration;
     def move(self, direction):
-        if direction == "up" and self.grid_y > 0:
-            self.grid_y -= 1;
-            self.rotate("up");
-        elif direction == "down" and self.grid_y < 10:
-            self.grid_y +=1;
-            self.rotate("down");
-        elif direction == "left" and self.grid_x > 0:
-            self.grid_x -=1;
-            self.rotate("left");
-        elif direction == "right" and self.grid_x < 15:
-            self.grid_x +=1;
-            self.rotate("right");
-        
-        # Update pixel position after moving
-        self.pixel_x, self.pixel_y = self.get_pixel_position();
-        self.rect.topleft = (self.pixel_x, self.pixel_y);
+        if not self.game_over:
+            if direction == "up" and self.grid_y > 0:
+                self.grid_y -= 1;
+                self.rotate("up");
+            elif direction == "down" and self.grid_y < 10:
+                self.grid_y +=1;
+                self.rotate("down");
+            elif direction == "left" and self.grid_x > 0:
+                self.grid_x -=1;
+                self.rotate("left");
+            elif direction == "right" and self.grid_x < 15:
+                self.grid_x +=1;
+                self.rotate("right");
+            
+            # Update pixel position after moving
+            self.pixel_x, self.pixel_y = self.get_pixel_position();
+            self.rect.topleft = (self.pixel_x, self.pixel_y);
     
     def rotate(self, direction):
         if(direction == "left"):
