@@ -27,7 +27,7 @@ class Log:
                 if self.pixel_x - self.width <= (14*50):
                     self.grid_x += self.speed;
                 else:
-                    self.grid_x = -1;
+                    self.grid_x = -4;
 
             self.pixel_x, self.pixel_y = self.get_pixel_position();
             self.rect.topleft = (self.pixel_x, self.pixel_y+25);

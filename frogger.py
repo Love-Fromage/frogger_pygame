@@ -40,8 +40,8 @@ game_grid = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -69,9 +69,10 @@ frogger = Frog(frogger_image, x=8, y=10);
 life1 = Frog(frog_life_image, x=0, y=11);
 life2 = Frog(frog_life_image, x=1, y=11);
 life3 = Frog(frog_life_image, x=2, y=11);
-log1 = Log(100, 50, 15, 2, "left", 0.12);
-log2 = Log(100, 50, 16, 3, "left", 0.20);
-log3 = Log(100, 50, 0, 4, "right", 0.15);
+log1 = Log(200, 50, 15, 2, "left", 0.12);
+log2 = Log(200, 50, 16, 3, "left", 0.20);
+log3 = Log(200, 50, 0, 4, "right", 0.15);
+log4 = Log(200, 50, 2, 5, "right", 0.12);
 
 
 
@@ -117,11 +118,12 @@ def draw_game(frogger, car):
 
 
     # Draw frogger
-    frogger.draw(screen);
-    car.draw(screen);
     log1.draw(screen);
     log2.draw(screen);
     log3.draw(screen);
+    log4.draw(screen);
+    frogger.draw(screen);
+    car.draw(screen);
     
     if frogger.life == 3:
         life1.draw(screen) 
@@ -198,6 +200,7 @@ while game_is_running:
     log1.move();
     log2.move();
     log3.move();
+    log4.move();
     draw_game(frogger, car);
     # Cap the frame rate 
     CLOCK.tick(FPS);
