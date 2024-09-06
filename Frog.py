@@ -17,6 +17,7 @@ class Frog:
         self.invulnerable = False;
         self.alpha = 255;
         self.alpha_change_direction = -5;
+        self.on_log = False;
 
     def get_pixel_position(self):
         return self.grid_x * 50, self.grid_y *50 # ASSUME GRID_SIZE is 50 pixels
@@ -81,6 +82,7 @@ class Frog:
 
     def check_collision_log(self, other_rect, log):
         if self.rect.colliderect(other_rect):
+            self.on_log = True;
             collision_x = self.rect.centerx;
             relative_x = collision_x - other_rect.left;
 
@@ -88,12 +90,12 @@ class Frog:
             relative_position_percentage = relative_x / other_rect.width
             relative_position_percentage = relative_position_percentage * 100 ;
             if relative_position_percentage <=33:
-                print("1/3");
+                # print("1/3");
                 self.pixel_x = (other_rect.left+(other_rect.width/3));
-            elif relative_position_percentage >33 and relative_position_percentage <= 66:
-                print("2/3");
-            elif relative_position_percentage >66:
-                print("3/3");
+            # elif relative_position_percentage >33 and relative_position_percentage <= 66:
+            #     # print("2/3");
+            # elif relative_position_percentage >66:
+            #     # print("3/3");
             
             if log.direction == "right":
                 self.grid_x += log.speed;
@@ -101,6 +103,9 @@ class Frog:
                 self.grid_x -= log.speed;
             self.pixel_x = self.get_pixel_position()[0];
             self.rect.topleft = (self.pixel_x, self.pixel_y);
+
+        else:
+            self.on_log = False;
 
 
             # Print or use the relative position

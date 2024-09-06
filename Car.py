@@ -19,14 +19,18 @@ class Car:
 
     def move(self):
         if not self.game_over:
-            if self.pixel_x+ self.rect.width >0 :
-                if self.direction == "left":
-                    self.grid_x -= 0.15;
-            else:
-                self.grid_x = 16;
-            self.pixel_x, self.pixel_y = self.get_pixel_position();
-    
-            self.rect.topleft = (self.pixel_x, self.pixel_y+25);
+            if self.direction == "left":
+                if self.pixel_x+ self.rect.width >0 :
+                     self.grid_x -= 0.15;
+                else:
+                    self.grid_x = 16;
+            elif self.direction == "right":
+                if self.pixel_x <= 16*50:
+                    self.grid_x += 0.15;
+                else:
+                    self.grid_x = -1;
 
+            self.pixel_x, self.pixel_y = self.get_pixel_position();
+            self.rect.topleft = (self.pixel_x, self.pixel_y+25);
     def draw(self, screen):
         screen.blit(self.image, (self.pixel_x, self.pixel_y));

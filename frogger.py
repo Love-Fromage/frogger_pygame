@@ -64,6 +64,7 @@ game_over_speed = 7;
 game_over_text.set_alpha(game_over_alpha);
 
 car = Car(car_image, 15, 8, "left");
+car2 = Car(car_image, -1, 7, "right");
 
 frogger = Frog(frogger_image, x=8, y=10);
 life1 = Frog(frog_life_image, x=0, y=11);
@@ -128,6 +129,7 @@ def draw_game(frogger, car):
 
     frogger.draw(screen);
     car.draw(screen);
+    car2.draw(screen);
     
     if frogger.life == 3:
         life1.draw(screen) 
@@ -173,6 +175,23 @@ def game_over():
         print("cest fini")
         return
 
+def check_if_touch_water():
+        # for row in range(ROWS):
+        #     for col in range(COLS):
+        #         cell_value = game_grid[row][col];
+        #         if cell_value == 1:
+        #             if frogger.grid_x == row and frogger.grid_y == col:
+        #                 print("water");
+    if not frogger.on_log: 
+        cell_value = game_grid[int(frogger.grid_y)][int(frogger.grid_x)];
+        if cell_value == 1:
+            print("water");
+    # frogger.lose_hp();
+    # frogger.grid_x = frogger.initial_x;
+    # frogger.grid_y = frogger.initial_y;
+    # frogger.pixel_x, frogger.pixel_y = frogger.get_pixel_position();
+    # frogger.rect.topleft = (frogger.pixel_x, frogger.pixel_y);
+
 # Game loop
 game_is_running = True;
 while game_is_running:
@@ -187,12 +206,14 @@ while game_is_running:
     if not is_game_over:
         if frogger.rect.colliderect(car.rect) and not frogger.invulnerable:
             ouch_sound.play();
-    
+
         frogger.check_collision_car(car.rect);
         frogger.check_collision_log(log1.rect, log1);
         frogger.check_collision_log(log2.rect, log2);
         frogger.check_collision_log(log3.rect, log3);
         frogger.check_collision_log(log4.rect, log4);
+
+        check_if_touch_water();
 
 
     if frogger.invulnerable:
@@ -205,6 +226,7 @@ while game_is_running:
             if frogger.alpha <= 50 or frogger.alpha >=255:
                 frogger.alpha_change_direction *= -1;
     car.move();
+    car2.move();
     log1.move();
     log2.move();
     log3.move();
