@@ -67,7 +67,7 @@ class Frog:
         temp_image = self.image.copy();
         temp_image.set_alpha(self.alpha);
         screen.blit(temp_image, (self.pixel_x, self.pixel_y));
-    def check_collision(self, other_rect):
+    def check_collision_car(self, other_rect):
         # current_tile = game_grid[self.grid_y][self.grid_x];
         if self.rect.colliderect(other_rect) and not self.invulnerable:
             print("ouch!");
@@ -78,3 +78,32 @@ class Frog:
             self.rect.topleft = (self.pixel_x, self.pixel_y);
             return True;
         return False;
+
+    def check_collision_log(self, other_rect, log):
+        if self.rect.colliderect(other_rect):
+            collision_x = self.rect.centerx;
+            relative_x = collision_x - other_rect.left;
+
+             # Optional: Normalize to a value between 0 and 1 (percentage of width)
+            relative_position_percentage = relative_x / other_rect.width
+            relative_position_percentage = relative_position_percentage * 100 ;
+            if relative_position_percentage <=33:
+                print("1/3");
+                self.pixel_x = (other_rect.left+(other_rect.width/3));
+            elif relative_position_percentage >33 and relative_position_percentage <= 66:
+                print("2/3");
+            elif relative_position_percentage >66:
+                print("3/3");
+            
+            if log.direction == "right":
+                self.grid_x += log.speed;
+            elif log.direction == "left":
+                self.grid_x -= log.speed;
+            self.pixel_x = self.get_pixel_position()[0];
+            self.rect.topleft = (self.pixel_x, self.pixel_y);
+
+
+            # Print or use the relative position
+            # print(f"{relative_position_percentage}");
+            # print(f"Collision relative X: {relative_x} pixels from target's left edge")
+            # print(f"Collision at {relative_position_percentage * 100:.2f}% of target_rect's width");

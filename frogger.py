@@ -70,9 +70,9 @@ life1 = Frog(frog_life_image, x=0, y=11);
 life2 = Frog(frog_life_image, x=1, y=11);
 life3 = Frog(frog_life_image, x=2, y=11);
 log1 = Log(200, 50, 15, 2, "left", 0.12);
-log2 = Log(200, 50, 16, 3, "left", 0.20);
+log2 = Log(200, 50, 16, 3, "right", 0.20);
 log3 = Log(200, 50, 0, 4, "right", 0.15);
-log4 = Log(200, 50, 2, 5, "right", 0.12);
+log4 = Log(200, 50, 2, 5, "left", 0.12);
 
 
 
@@ -122,6 +122,10 @@ def draw_game(frogger, car):
     log2.draw(screen);
     log3.draw(screen);
     log4.draw(screen);
+    # pygame.draw.rect(screen, (255,0,0), (((log4.rect.right-(log4.rect.width/3))), (log4.rect.top+log4.rect.height/2), 2,2));
+
+    #testing 
+
     frogger.draw(screen);
     car.draw(screen);
     
@@ -184,7 +188,11 @@ while game_is_running:
         if frogger.rect.colliderect(car.rect) and not frogger.invulnerable:
             ouch_sound.play();
     
-        frogger.check_collision(car.rect);
+        frogger.check_collision_car(car.rect);
+        frogger.check_collision_log(log1.rect, log1);
+        frogger.check_collision_log(log2.rect, log2);
+        frogger.check_collision_log(log3.rect, log3);
+        frogger.check_collision_log(log4.rect, log4);
 
 
     if frogger.invulnerable:

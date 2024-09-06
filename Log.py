@@ -23,7 +23,7 @@ class Log:
                 else:
                     self.grid_x = 16;
             elif self.direction == "right":
-                print(f"self.pixel_x - self.width = {self.pixel_x - self.width}")
+                # print(f"self.pixel_x - self.width = {self.pixel_x - self.width}")
                 if self.pixel_x - self.width <= (14*50):
                     self.grid_x += self.speed;
                 else:
