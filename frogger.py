@@ -66,10 +66,10 @@ game_over_text.set_alpha(game_over_alpha);
 car = Car(car_image, 15, 8, "left");
 car2 = Car(car_image, -1, 7, "right");
 
-frogger = Frog(frogger_image, x=8, y=10);
-life1 = Frog(frog_life_image, x=0, y=11);
-life2 = Frog(frog_life_image, x=1, y=11);
-life3 = Frog(frog_life_image, x=2, y=11);
+frogger = Frog(frogger_image, x=8, y=10, game_grid=game_grid);
+life1 = Frog(frog_life_image, x=0, y=11, game_grid=game_grid);
+life2 = Frog(frog_life_image, x=1, y=11, game_grid=game_grid);
+life3 = Frog(frog_life_image, x=2, y=11, game_grid=game_grid);
 log1 = Log(200, 50, 15, 2, "left", 0.12);
 log2 = Log(200, 50, 16, 3, "right", 0.20);
 log3 = Log(200, 50, 0, 4, "right", 0.15);
@@ -175,6 +175,12 @@ def game_over():
         print("cest fini")
         return
 
+logs = [
+    log1,
+    log2,
+    log3,
+    log4
+];
 def check_if_touch_water():
         # for row in range(ROWS):
         #     for col in range(COLS):
@@ -204,16 +210,16 @@ while game_is_running:
     handle_key_events(frogger);
 
     if not is_game_over:
-        if frogger.rect.colliderect(car.rect) and not frogger.invulnerable:
+        if (frogger.rect.colliderect(car.rect) or frogger.rect.colliderect(car2.rect)) and not frogger.invulnerable:
             ouch_sound.play();
 
         frogger.check_collision_car(car.rect);
-        frogger.check_collision_log(log1.rect, log1);
-        frogger.check_collision_log(log2.rect, log2);
-        frogger.check_collision_log(log3.rect, log3);
-        frogger.check_collision_log(log4.rect, log4);
+        frogger.check_collision_car(car2.rect);
+        frogger.check_collision_log(logs);
+        if frogger.ouch:
+            ouch_sound.play();
 
-        check_if_touch_water();
+        # check_if_touch_water();
 
 
     if frogger.invulnerable:

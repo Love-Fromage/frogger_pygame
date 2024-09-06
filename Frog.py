@@ -1,12 +1,13 @@
 import pygame;
 import sys;
 class Frog:
-    def __init__(self,image, x, y):
+    def __init__(self,image, x, y, game_grid):
         self.grid_x = x;
         self.grid_y = y;
         self.initial_x = x;
         self.initial_y = y;
         self.original_image = image;
+        self.game_grid = game_grid;
         self.image = image;
         self.rect = self.image.get_rect();
         self.pixel_x, self.pixel_y = self.get_pixel_position();
@@ -18,6 +19,7 @@ class Frog:
         self.alpha = 255;
         self.alpha_change_direction = -5;
         self.on_log = False;
+        self.ouch = False;
 
     def get_pixel_position(self):
         return self.grid_x * 50, self.grid_y *50 # ASSUME GRID_SIZE is 50 pixels
@@ -80,35 +82,67 @@ class Frog:
             return True;
         return False;
 
-    def check_collision_log(self, other_rect, log):
-        if self.rect.colliderect(other_rect):
-            self.on_log = True;
-            collision_x = self.rect.centerx;
-            relative_x = collision_x - other_rect.left;
+    def check_collision_log(self, logs):
+        self.on_log = False;
+        
 
-             # Optional: Normalize to a value between 0 and 1 (percentage of width)
-            relative_position_percentage = relative_x / other_rect.width
-            relative_position_percentage = relative_position_percentage * 100 ;
-            if relative_position_percentage <=33:
-                # print("1/3");
-                self.pixel_x = (other_rect.left+(other_rect.width/3));
-            # elif relative_position_percentage >33 and relative_position_percentage <= 66:
-            #     # print("2/3");
-            # elif relative_position_percentage >66:
-            #     # print("3/3");
+        for log in logs:
+            if self.rect.colliderect(log.rect):
+                self.on_log = True;
+                if log.direction == "right":
+                    self.grid_x += log.speed;
+                elif log.direction == "left":
+                    self.grid_x -= log.speed;
+
+
+                self.pixel_x = self.get_pixel_position()[0];
+                self.rect.topleft = (self.pixel_x, self.pixel_y);
+                break;
+
+        if not self.on_log:
+            self.check_if_touch_water();
+        # if self.rect.colliderect(other_rect):
+        #     self.on_log = True;
+        #     print(f"{self.on_log}");
+        #     collision_x = self.rect.centerx;
+        #     relative_x = collision_x - other_rect.left;
+
+        #      # Optional: Normalize to a value between 0 and 1 (percentage of width)
+        #     relative_position_percentage = relative_x / other_rect.width
+        #     relative_position_percentage = relative_position_percentage * 100 ;
+        #     if relative_position_percentage <=33:
+        #         # print("1/3");
+        #         self.pixel_x = (other_rect.left+(other_rect.width/3));
+        #     # elif relative_position_percentage >33 and relative_position_percentage <= 66:
+        #     #     # print("2/3");
+        #     # elif relative_position_percentage >66:
+        #     #     # print("3/3");
             
-            if log.direction == "right":
-                self.grid_x += log.speed;
-            elif log.direction == "left":
-                self.grid_x -= log.speed;
-            self.pixel_x = self.get_pixel_position()[0];
-            self.rect.topleft = (self.pixel_x, self.pixel_y);
+        #     if log.direction == "right":
+        #         self.grid_x += log.speed;
+        #     elif log.direction == "left":
+        #         self.grid_x -= log.speed;
+        #     self.pixel_x = self.get_pixel_position()[0];
+        #     self.rect.topleft = (self.pixel_x, self.pixel_y);
 
-        else:
-            self.on_log = False;
+        # else:
+        #     self.on_log = False;
+        #     print(f"{self.on_log}")
 
 
             # Print or use the relative position
             # print(f"{relative_position_percentage}");
             # print(f"Collision relative X: {relative_x} pixels from target's left edge")
             # print(f"Collision at {relative_position_percentage * 100:.2f}% of target_rect's width");
+    def check_if_touch_water(self):
+        cell_value = self.game_grid[int(self.grid_y)][int(self.grid_x)];
+        if cell_value == 1:
+            print("water");
+            self.ouch = True;
+            self.lose_hp();
+            self.grid_x = self.initial_x;
+            self.grid_y = self.initial_y;
+            self.pixel_x, self.pixel_y = self.get_pixel_position();
+            self.rect.topleft = (self.pixel_x, self.pixel_y);
+        else:
+            self.ouch = False;
