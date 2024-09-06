@@ -71,7 +71,7 @@ life2 = Frog(frog_life_image, x=1, y=11);
 life3 = Frog(frog_life_image, x=2, y=11);
 log1 = Log(100, 50, 15, 2, "left", 0.12);
 log2 = Log(100, 50, 16, 3, "left", 0.20);
-log3 = Log(100, 50, 1, 4, "right", 0.15);
+log3 = Log(100, 50, 0, 4, "right", 0.15);
 
 
 

@@ -23,10 +23,11 @@ class Log:
                 else:
                     self.grid_x = 16;
             elif self.direction == "right":
-                if self.pixel_x - self.rect.width < 800:
+                print(f"self.pixel_x - self.width = {self.pixel_x - self.width}")
+                if self.pixel_x - self.width <= (14*50):
                     self.grid_x += self.speed;
                 else:
-                    self.grid_x = 0;
+                    self.grid_x = -1;
 
             self.pixel_x, self.pixel_y = self.get_pixel_position();
             self.rect.topleft = (self.pixel_x, self.pixel_y+25);
