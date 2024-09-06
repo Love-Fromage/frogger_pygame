@@ -4,6 +4,7 @@ import sys
 import pygame.locals
 from Frog import Frog
 from Car import Car
+from Log import Log
 
 # Initialize Pygame
 pygame.init()
@@ -68,6 +69,9 @@ frogger = Frog(frogger_image, x=8, y=10);
 life1 = Frog(frog_life_image, x=0, y=11);
 life2 = Frog(frog_life_image, x=1, y=11);
 life3 = Frog(frog_life_image, x=2, y=11);
+log1 = Log(100, 50, 15, 2, "left", 0.12);
+log2 = Log(100, 50, 16, 3, "left", 0.20);
+log3 = Log(100, 50, 1, 4, "right", 0.15);
 
 
 
@@ -115,6 +119,9 @@ def draw_game(frogger, car):
     # Draw frogger
     frogger.draw(screen);
     car.draw(screen);
+    log1.draw(screen);
+    log2.draw(screen);
+    log3.draw(screen);
     
     if frogger.life == 3:
         life1.draw(screen) 
@@ -129,7 +136,7 @@ def draw_game(frogger, car):
 
     #Draw other game elements here
     # Draw hitboxes for debugging
-    pygame.draw.rect(screen, (0,0,255), frogger.rect, 2);
+    # pygame.draw.rect(screen, (0,0,255), frogger.rect, 2);
     # pygame.draw.rect(screen, (255,0,255), car.rect, 2);
 
     if is_game_over:
@@ -188,6 +195,9 @@ while game_is_running:
             if frogger.alpha <= 50 or frogger.alpha >=255:
                 frogger.alpha_change_direction *= -1;
     car.move();
+    log1.move();
+    log2.move();
+    log3.move();
     draw_game(frogger, car);
     # Cap the frame rate 
     CLOCK.tick(FPS);

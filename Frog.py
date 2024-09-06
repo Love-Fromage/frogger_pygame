@@ -4,12 +4,14 @@ class Frog:
     def __init__(self,image, x, y):
         self.grid_x = x;
         self.grid_y = y;
+        self.initial_x = x;
+        self.initial_y = y;
         self.original_image = image;
         self.image = image;
         self.rect = self.image.get_rect();
         self.pixel_x, self.pixel_y = self.get_pixel_position();
         self.rect.topleft = (self.pixel_x, self.pixel_y);
-        self.life = 1;
+        self.life = 3;
         self.game_over = False;
         self.invulnerable_timer = 0;
         self.invulnerable = False;
@@ -70,5 +72,9 @@ class Frog:
         if self.rect.colliderect(other_rect) and not self.invulnerable:
             print("ouch!");
             self.lose_hp();
+            self.grid_x = self.initial_x;
+            self.grid_y = self.initial_y;
+            self.pixel_x, self.pixel_y = self.get_pixel_position();
+            self.rect.topleft = (self.pixel_x, self.pixel_y);
             return True;
         return False;
